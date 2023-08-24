@@ -4,6 +4,7 @@ pipeline {
     dockerimagename = "nessmahm/nodejsapp:1.0"
     dockerImage = ""
     k3sKubeconfig = "/home/nessma/.kube/config"
+    GIT_SSH_COMMAND = 'ssh -i /home/nessma/.ssh/id_rsa.pub'
 
   }
 
@@ -13,7 +14,9 @@ pipeline {
 
     stage('Checkout Source') {
       steps {
-        git 'https://github.com/nessmahm/devops-project'
+        sshagent([GIT_SSH_COMMAND]) {
+          git 'https://github.com/nessmahm/devops-project'
+        }
       }
     }
 
@@ -41,7 +44,7 @@ pipeline {
     stage('Deploying App to Kubernetes') {
       steps {
         script {
-          sh "kubectl --kubeconfig=${k3sKubeconfig} apply -f deploymentservice.yml"
+          sh "kubectl --kubeconfig=${k3sKubeconfig} apply -f kubeDeployment.yaml"
         }
       }
     }
