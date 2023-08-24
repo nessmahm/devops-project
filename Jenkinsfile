@@ -26,7 +26,7 @@ pipeline {
     stage('Deploying App to Kubernetes') {
       steps {
         script {
-                echp "deploy"
+                echo "deploy"
         }
       }
     }
