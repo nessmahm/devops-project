@@ -1,32 +1,47 @@
 pipeline {
 
+  environment {
+    dockerimagename = "nessmahm/nodejsapp:1.0"
+    dockerImage = ""
+    k3sKubeconfig = "/home/nessma/.kube/config"
+
+  }
+
   agent any
 
   stages {
 
-   
+    stage('Checkout Source') {
+      steps {
+        git 'https://github.com/nessmahm/devops-project'
+      }
+    }
+
     stage('Build image') {
       steps{
         script {
-                echo "build app"
+          dockerImage = docker.build dockerimagename
         }
       }
     }
 
-    stage('Test') {
-     
-     
+    stage('Pushing Image') {
+      environment {
+               registryCredential = 'dockerHubLogin'
+           }
       steps{
         script {
-         echo "test app"
+          docker.withRegistry( 'https://registry.hub.docker.com', registryCredential ) {
+            dockerImage.push("1.2")
           }
         }
       }
-    
+    }
+
     stage('Deploying App to Kubernetes') {
       steps {
         script {
-                echo "deploy"
+          sh "kubectl --kubeconfig=${k3sKubeconfig} apply -f deploymentservice.yml"
         }
       }
     }
