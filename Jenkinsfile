@@ -13,7 +13,7 @@ pipeline {
 
     stage('Checkout Source') {
       steps {
-        git 'https://github.com/nessmahm/devops-project'
+        git 'https://github.com/nessmahm/devops-project.git'
       }
     }
 
