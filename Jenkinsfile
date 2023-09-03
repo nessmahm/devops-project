@@ -16,7 +16,7 @@ pipeline {
        script {
       // Define the repository URL and branch name
       def repoUrl = 'https://github.com/nessmahm/devops-project.git'
-      def branchName = '*/main'
+      def branchName = 'main'
 
       // Checkout the specified branch
       git branch: branchName, url: repoUrl
