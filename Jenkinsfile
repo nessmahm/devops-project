@@ -22,6 +22,7 @@ pipeline {
       git branch: branchName, url: repoUrl
     }
     }
+    }
 
     stage('Build image') {
       steps{
